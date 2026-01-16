@@ -6,24 +6,3 @@ public class WordleGameException extends Exception {
         super(message);
     }
 }
-
-// Слово не найдено в словаре
-class WordNotFoundInDictionaryException extends WordleGameException {
-    public WordNotFoundInDictionaryException(String message) {
-        super(message);
-    }
-}
-
-// Некорректный ввод пользователя
-class InvalidInputException extends WordleGameException {
-    public InvalidInputException(String message) {
-        super(message);
-    }
-}
-
-// Неправильная длина слова
-class InvalidWordLengthException extends InvalidInputException {
-    public InvalidWordLengthException(String message) {
-        super(message);
-    }
-}
