@@ -1,5 +1,7 @@
 package ru.yandex.practicum;
 
+import ru.yandex.practicum.exception.*;
+
 import java.util.*;
 
 /*
@@ -30,11 +32,11 @@ public class WordleGame {
 
     public WordleGame(WordleDictionary dictionary, String answer) {
         this.dictionary = dictionary;
-        this.answer = dictionary.normalizeWord(answer);
+        this.answer = WordleDictionary.normalizeWord(answer);
         this.remainingSteps = 6;
     }
 
-    public String makeGuess(String guess) throws WordleGameException {
+    public String makeGuess(String guess) {
         if (gameFinished) {
             throw new IllegalStateException("Игра уже завершена");
         }
@@ -43,7 +45,7 @@ public class WordleGame {
             throw new IllegalStateException("Закончились попытки");
         }
 
-        String normalizedGuess = dictionary.normalizeWord(guess);
+        String normalizedGuess = WordleDictionary.normalizeWord(guess);
 
         // Проверка ввода
         if (normalizedGuess.length() != 5) {

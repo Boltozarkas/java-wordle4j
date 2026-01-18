@@ -1,4 +1,4 @@
-package ru.yandex.practicum;
+package ru.yandex.practicum.exception;
 
 // Некорректный ввод пользователя
 public class InvalidInputException extends WordleGameException {

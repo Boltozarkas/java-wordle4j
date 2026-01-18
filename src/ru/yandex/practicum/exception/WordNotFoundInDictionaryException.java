@@ -1,4 +1,4 @@
-package ru.yandex.practicum;
+package ru.yandex.practicum.exception;
 
 // Слово не найдено в словаре
 public class WordNotFoundInDictionaryException extends WordleGameException {

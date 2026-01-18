@@ -3,6 +3,7 @@ package ru.yandex.practicum;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.*;
+import ru.yandex.practicum.exception.*;
 
 import java.io.*;
 import java.util.*;
@@ -25,9 +26,9 @@ class WordleTest {
 
     @Test
     void testDictionaryNormalization() {
-        assertEquals("еж", dictionary.normalizeWord("Ёж"));
-        assertEquals("елка", dictionary.normalizeWord("Ёлка"));
-        assertEquals("слово", dictionary.normalizeWord("Слово "));
+        assertEquals("еж", WordleDictionary.normalizeWord("Ёж"));
+        assertEquals("елка", WordleDictionary.normalizeWord("Ёлка"));
+        assertEquals("слово", WordleDictionary.normalizeWord("Слово "));
     }
 
     @Test
@@ -48,7 +49,7 @@ class WordleTest {
     }
 
     @Test
-    void testMakeGuess() throws WordleGameException {
+    void testMakeGuess() {
         String result = game.makeGuess("стула");
         assertNotNull(result);
         assertEquals(5, game.getRemainingSteps());
@@ -81,14 +82,14 @@ class WordleTest {
     }
 
     @Test
-    void testWinGame() throws WordleGameException {
+    void testWinGame() {
         game.makeGuess("столы");
         assertTrue(game.isGameFinished());
         assertTrue(game.isWon());
     }
 
     @Test
-    void testLoseGame() throws WordleGameException {
+    void testLoseGame() {
         for (int i = 0; i < 6; i++) {
             game.makeGuess("стула");
         }
@@ -97,7 +98,7 @@ class WordleTest {
     }
 
     @Test
-    void testGetHint() throws WordleGameException {
+    void testGetHint() {
         String hint = game.getHint();
         assertNotNull(hint);
         assertNotEquals("Нет подходящих слов в словаре", hint);
@@ -111,7 +112,7 @@ class WordleTest {
     }
 
     @Test
-    void testAutoPlayWithEnter() throws WordleGameException {
+    void testAutoPlayWithEnter() {
         // Тестируем, что при пустом вводе (Enter) используется подсказка
         WordleDictionary smallDict = new WordleDictionary(Arrays.asList("столы", "стула", "окнаа"));
         WordleGame autoGame = new WordleGame(smallDict, "столы");

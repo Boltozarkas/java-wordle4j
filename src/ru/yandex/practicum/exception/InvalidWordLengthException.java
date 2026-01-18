@@ -1,4 +1,4 @@
-package ru.yandex.practicum;
+package ru.yandex.practicum.exception;
 
 // Неправильная длина слова
 public class InvalidWordLengthException extends InvalidInputException {

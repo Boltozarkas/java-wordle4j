@@ -20,7 +20,7 @@ public class WordleDictionaryLoader {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                String normalizedWord = normalizeWord(line);
+                String normalizedWord = WordleDictionary.normalizeWord(line);
                 if (normalizedWord.length() == 5) {
                     words.add(normalizedWord);
                 }
@@ -32,9 +32,5 @@ public class WordleDictionaryLoader {
         }
 
         return new WordleDictionary(words);
-    }
-
-    private String normalizeWord(String word) {
-        return word.trim().toLowerCase().replace('ё', 'е');
     }
 }

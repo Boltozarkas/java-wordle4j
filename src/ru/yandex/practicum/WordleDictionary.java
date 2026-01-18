@@ -9,6 +9,12 @@ import java.util.*;
     также этот класс может содержать рутинные функции по сравнению слов, букв и т.д.
  */
 public class WordleDictionary {
+    // Константы
+    public static final int WORD_LENGTH = 5;
+    private static final char EXACT_MATCH = '+';
+    private static final char PARTIAL_MATCH = '^';
+    private static final char NO_MATCH = '-';
+
     private final List<String> words;
     private final Random random = new Random();
 
@@ -17,10 +23,15 @@ public class WordleDictionary {
         // Фильтруем только 5-буквенные слова при создании
         for (String word : words) {
             String normalized = normalizeWord(word);
-            if (normalized.length() == 5) {
+            if (normalized.length() == WORD_LENGTH) {
                 this.words.add(normalized);
             }
         }
+    }
+
+    public static String normalizeWord(String word) {
+        if (word == null) return "";
+        return word.trim().toLowerCase().replace('ё', 'е');
     }
 
     public List<String> getWords() {
@@ -39,33 +50,28 @@ public class WordleDictionary {
         return words.contains(normalizedWord);
     }
 
-    public String normalizeWord(String word) {
-        if (word == null) return "";
-        return word.trim().toLowerCase().replace('ё', 'е');
-    }
-
     // Основной метод анализа слов
     public String analyzeWord(String guess, String answer) {
         guess = normalizeWord(guess);
         answer = normalizeWord(answer);
 
-        char[] result = new char[5];
-        Arrays.fill(result, '-');
+        char[] result = new char[WORD_LENGTH];
+        Arrays.fill(result, NO_MATCH);
 
         // Сначала обрабатываем зеленые (точные совпадения)
-        boolean[] answerUsed = new boolean[5];
-        boolean[] guessProcessed = new boolean[5];
+        boolean[] answerUsed = new boolean[WORD_LENGTH];
+        boolean[] guessProcessed = new boolean[WORD_LENGTH];
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < WORD_LENGTH; i++) {
             if (guess.charAt(i) == answer.charAt(i)) {
-                result[i] = '+';
+                result[i] = EXACT_MATCH;
                 answerUsed[i] = true;
                 guessProcessed[i] = true;
             }
         }
 
         // Затем обрабатываем желтые (есть, но не на месте)
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < WORD_LENGTH; i++) {
             if (guessProcessed[i]) {
                 continue;
             }
@@ -73,9 +79,9 @@ public class WordleDictionary {
             char currentChar = guess.charAt(i);
 
             // Ищем эту букву в ответе на еще неиспользованных позициях
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < WORD_LENGTH; j++) {
                 if (!answerUsed[j] && answer.charAt(j) == currentChar) {
-                    result[i] = '^';
+                    result[i] = PARTIAL_MATCH;
                     answerUsed[j] = true;
                     break;
                 }
@@ -109,8 +115,8 @@ public class WordleDictionary {
         word = normalizeWord(word);
 
         // Проверяем точные совпадения
-        for (int i = 0; i < 5; i++) {
-            if (hint.charAt(i) == '+') {
+        for (int i = 0; i < WORD_LENGTH; i++) {
+            if (hint.charAt(i) == EXACT_MATCH) {
                 if (word.charAt(i) != guess.charAt(i)) {
                     return false;
                 }
@@ -118,8 +124,8 @@ public class WordleDictionary {
         }
 
         // Проверяем желтые совпадения (есть, но не на месте)
-        for (int i = 0; i < 5; i++) {
-            if (hint.charAt(i) == '^') {
+        for (int i = 0; i < WORD_LENGTH; i++) {
+            if (hint.charAt(i) == PARTIAL_MATCH) {
                 char guessChar = guess.charAt(i);
 
                 // Не может быть на этой же позиции
@@ -129,7 +135,7 @@ public class WordleDictionary {
 
                 // Должна быть где-то в слове
                 boolean found = false;
-                for (int j = 0; j < 5; j++) {
+                for (int j = 0; j < WORD_LENGTH; j++) {
                     if (j != i && word.charAt(j) == guessChar) {
                         found = true;
                         break;
@@ -142,22 +148,22 @@ public class WordleDictionary {
         }
 
         // Проверяем серые (отсутствующие буквы)
-        for (int i = 0; i < 5; i++) {
-            if (hint.charAt(i) == '-') {
+        for (int i = 0; i < WORD_LENGTH; i++) {
+            if (hint.charAt(i) == NO_MATCH) {
                 char guessChar = guess.charAt(i);
 
                 // Считаем, сколько раз эта буква встречается в guess
                 // и сколько из них помечены как '+'
                 int exactMatchesInGuess = 0;
-                for (int j = 0; j < 5; j++) {
-                    if (guess.charAt(j) == guessChar && hint.charAt(j) == '+') {
+                for (int j = 0; j < WORD_LENGTH; j++) {
+                    if (guess.charAt(j) == guessChar && hint.charAt(j) == EXACT_MATCH) {
                         exactMatchesInGuess++;
                     }
                 }
 
                 // Считаем, сколько раз эта буква встречается в word
                 int countInWord = 0;
-                for (int j = 0; j < 5; j++) {
+                for (int j = 0; j < WORD_LENGTH; j++) {
                     if (word.charAt(j) == guessChar) {
                         countInWord++;
                     }
